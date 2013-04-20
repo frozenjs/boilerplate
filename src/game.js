@@ -1,7 +1,7 @@
 define([
   './update',
   './draw',
-  'frozen/BoxGame',
+  'frozen/box2d/BoxGame',
   'frozen/box2d/entities',
   './boxData'
 ], function(update, draw, BoxGame, entities, boxData){

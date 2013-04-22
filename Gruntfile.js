@@ -9,6 +9,9 @@ var folderMount = function folderMount(connect, point) {
   return connect.static(path.resolve(point));
 };
 
+// Workaround for Windows giving Error 108 (ERR_ADDRESS_INVALID) when opening 0.0.0.0
+var hostname = process.platform !== 'win32' ? '0.0.0.0' : 'localhost';
+
 module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
@@ -36,7 +39,7 @@ module.exports = function(grunt) {
         }
       },
       options: {
-        hostname: '0.0.0.0',
+        hostname: hostname,
         port: 8000,
         keepalive: false
       }

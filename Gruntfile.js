@@ -1,5 +1,5 @@
 /*jshint globalstrict:true*/
-/*global module:false*/
+/*global module:false, process:false*/
 'use strict';
 
 var path = require('path');

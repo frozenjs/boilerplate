@@ -3,11 +3,7 @@
 'use strict';
 
 var path = require('path');
-var lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet;
-
-var folderMount = function folderMount(connect, point) {
-  return connect.static(path.resolve(point));
-};
+var connectLR = require('connect-livereload');
 
 // Workaround for Windows giving Error 108 (ERR_ADDRESS_INVALID) when opening 0.0.0.0
 var hostname = process.platform !== 'win32' ? '0.0.0.0' : 'localhost';
@@ -34,7 +30,7 @@ module.exports = function(grunt) {
       game: {
         options: {
           middleware: function(connect, options) {
-            return [lrSnippet, folderMount(connect, options.base)];
+            return [connectLR(), connect.static(path.resolve(options.base))];
           }
         }
       },
@@ -49,10 +45,13 @@ module.exports = function(grunt) {
         path: 'http://<%= connect.options.hostname %>:<%= connect.options.port %>/'
       }
     },
-    regarde: {
+    watch: {
       game: {
         files: ['src/**/*.js', 'styles/**/*.css', 'dojoConfig.js', 'index.html'],
-        tasks: ['devel']
+        tasks: ['jshint:game'],
+        options: {
+          livereload: true
+        }
       }
     },
     dojo: {
@@ -69,16 +68,14 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-dojo');
   grunt.loadNpmTasks('grunt-open');
-  grunt.loadNpmTasks('grunt-regarde');
+  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks('grunt-contrib-livereload');
 
   // Default task.
-  grunt.registerTask('default', ['jshint:game', 'livereload-start', 'connect:game', 'open:game', 'regarde:game']);
+  grunt.registerTask('default', ['jshint:game', 'connect:game', 'open:game', 'watch:game']);
 
-  grunt.registerTask('devel', ['jshint:game', 'livereload']);
   grunt.registerTask('build', ['jshint:game', 'dojo:game']);
 
 };

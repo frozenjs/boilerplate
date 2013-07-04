@@ -17,7 +17,7 @@
   "volo": {
     "baseUrl": "deps",
     "dependencies": {
-      "frozen": "github:iceddev/frozen/0.4.0"
+      "frozen": "github:iceddev/frozen/0.4.1"
     }
   },
   "dojoBuild": "game.profile.js"
